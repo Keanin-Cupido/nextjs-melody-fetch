@@ -1,101 +1,110 @@
-import Image from "next/image";
+"use client"
+
+import { useState } from 'react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Music2, Download, Upload } from 'lucide-react'
+import { UrlInput } from "@/components/UrlInput"
+import { QualitySelector } from "@/components/QualitySelector"
+import { UploadArea } from "@/components/UploadArea"
+import { FeatureCard } from "@/components/FeatureCard"
+import { Navbar } from "@/components/Navbar"
+import { Footer } from "@/components/Footer"
+import { ProgressIndicator } from "@/components/ProgressIndicator"
+import { ConversionHistory } from "@/components/ConversionHistory"
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [conversionProgress, setConversionProgress] = useState(0)
+  const [conversionHistory, setConversionHistory] = useState([
+    { id: '1', title: 'Sample Video 1', duration: '3:45', size: '3.2 MB', date: '2023-05-15' },
+    { id: '2', title: 'Sample Video 2', duration: '4:20', size: '4.1 MB', date: '2023-05-14' },
+  ])
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  const handleConvert = () => {
+    // Simulating conversion process
+    let progress = 0
+    const interval = setInterval(() => {
+      progress += 10
+      setConversionProgress(progress)
+      if (progress >= 100) {
+        clearInterval(interval)
+        // Add to conversion history
+        setConversionHistory(prev => [
+          { id: Date.now().toString(), title: 'New Conversion', duration: '3:30', size: '3.5 MB', date: new Date().toISOString().split('T')[0] },
+          ...prev
+        ])
+      }
+    }, 500)
+  }
+
+  const handleDownload = (id: string) => {
+    console.log(`Downloading file with id: ${id}`)
+    // Implement download logic here
+  }
+
+  const handleDelete = (id: string) => {
+    setConversionHistory(prev => prev.filter(item => item.id !== id))
+  }
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col">
+      <Navbar />
+      <main className="flex-grow container mx-auto px-4 py-16">
+        <Card className="w-full max-w-4xl mx-auto border-accent/20 py-4">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl font-bold text-accent">YouTube to MP3 Converter</CardTitle>
+            <CardDescription>
+              Convert YouTube videos to high-quality MP3 files quickly and easily
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <Tabs defaultValue="url" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="url">URL</TabsTrigger>
+                <TabsTrigger value="upload">Upload</TabsTrigger>
+              </TabsList>
+              <TabsContent value="url">
+                <UrlInput onConvert={handleConvert} />
+              </TabsContent>
+              <TabsContent value="upload">
+                <UploadArea />
+              </TabsContent>
+            </Tabs>
+
+            <QualitySelector />
+
+            {conversionProgress > 0 && conversionProgress < 100 && (
+              <ProgressIndicator progress={conversionProgress} />
+            )}
+
+            <div className="grid gap-4 md:grid-cols-3">
+              <FeatureCard 
+                icon={Music2}
+                title="High Quality"
+                description="Up to 320kbps audio"
+              />
+              <FeatureCard 
+                icon={Download}
+                title="Fast Download"
+                description="No waiting time"
+              />
+              <FeatureCard 
+                icon={Upload}
+                title="Easy Upload"
+                description="Drag & drop support"
+              />
+            </div>
+
+            <ConversionHistory 
+              items={conversionHistory}
+              onDownload={handleDownload}
+              onDelete={handleDelete}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+          </CardContent>
+        </Card>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <Footer />
     </div>
-  );
+  )
 }
+
