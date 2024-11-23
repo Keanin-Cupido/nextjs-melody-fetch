@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { TypeIcon as type, LucideIcon } from 'lucide-react'
+import { LucideIcon } from 'lucide-react'
 
 interface FeatureCardProps {
   icon: LucideIcon

@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
-import { Music2 } from 'lucide-react'
 import { ThemeToggle } from "@/components/theme-toggle"
 import { AboutPopup } from "@/components/AboutPopup"
 import { ContactPopup } from "@/components/ContactPopup"

@@ -22,7 +22,7 @@ export function ContactPopup({ isOpen, onClose }: ContactPopupProps) {
         <DialogHeader>
           <DialogTitle>Contact Us</DialogTitle>
           <DialogDescription>
-            Have a question or feedback? We'd love to hear from you!
+            Have a question or feedback? We&apos;d love to hear from you!
           </DialogDescription>
         </DialogHeader>
         <form className="space-y-4">

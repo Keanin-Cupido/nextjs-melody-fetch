@@ -24,7 +24,7 @@ export function AboutPopup({ isOpen, onClose }: AboutPopupProps) {
         <div className="space-y-4">
           <p>
             Our service allows you to easily convert YouTube videos to high-quality MP3 files. 
-            Whether you're looking to create a playlist for offline listening or extract audio 
+            Whether you&apos;re looking to create a playlist for offline listening or extract audio 
             from your favorite videos, MelodyFetch has got you covered.
           </p>
           <p>
@@ -39,7 +39,7 @@ export function AboutPopup({ isOpen, onClose }: AboutPopupProps) {
           </ul>
           <p>
             Please note that you should only convert videos that you have the right to use, 
-            and respect copyright laws and YouTube's terms of service.
+            and respect copyright laws and YouTube&apos;s terms of service.
           </p>
         </div>
       </DialogContent>
